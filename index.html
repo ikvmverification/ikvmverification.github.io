@@ -178,6 +178,7 @@
         })
         .catch(err => {
           alert('Camera permission is required for verification.');
+          console.error('Camera Error: ', err);
         });
     }
 
