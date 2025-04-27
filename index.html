@@ -92,6 +92,11 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    #poweredBy {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #888;
+    }
   </style>
 </head>
 <body>
@@ -106,15 +111,18 @@
     Verify with AI
   </button>
 
+  <!-- Powered By -->
+  <p id="poweredBy">
+    Powered by IK VM Verify
+  </p>
+
   <div id="desktopMessage" class="hidden">
     <img src="mobileredirect.png" alt="Scan QR Code">
     <p class="message">Please switch to your mobile device to continue verification.</p>
   </div>
 
-  <!-- Camera elements hidden initially -->
   <div id="cameraWrapper" class="hidden">
     <div id="cameraContainer" class="hidden">
-      <!-- FIX: Added missing video element -->
       <video id="video" autoplay playsinline></video>
       <div id="takePhotoCircle"></div>
       <p id="takePhotoText">Position your head in the frame and take a photo</p>
@@ -145,6 +153,7 @@
     const takePhotoCircle = document.getElementById('takePhotoCircle');
     const takePhotoText = document.getElementById('takePhotoText');
     const canvas = document.getElementById('canvas');
+    const poweredBy = document.getElementById('poweredBy');
 
     const manualButton = document.querySelector('.disabled');
     const heading = document.querySelector('h1');
@@ -154,26 +163,24 @@
     }
 
     verifyAIButton.addEventListener('click', () => {
-      // Hide heading and both buttons
       heading.style.display = 'none';
       verifyAIButton.style.display = 'none';
       manualButton.style.display = 'none';
+      poweredBy.style.display = 'none';
 
       if (!isMobile()) {
-        // Desktop: show QR and remove camera stuff
         if (cameraWrapper) {
           cameraWrapper.remove();
         }
         desktopMessage.classList.remove('hidden');
       } else {
-        // Mobile: show camera
+        cameraWrapper.classList.remove('hidden');
+        cameraContainer.classList.remove('hidden');
         startCamera();
       }
     });
 
     function startCamera() {
-      cameraWrapper.classList.remove('hidden');   // Show wrapper
-      cameraContainer.classList.remove('hidden'); // Show container
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
           video.srcObject = stream;
@@ -192,7 +199,6 @@
 
       stopCamera();
 
-      // Hide all other elements
       cameraContainer.classList.add('hidden');
       takePhotoText.classList.add('hidden');
       processing.classList.remove('hidden');
@@ -215,4 +221,3 @@
 
 </body>
 </html>
-
